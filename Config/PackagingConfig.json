@@ -1,0 +1,10 @@
+{
+  "TemplateRoot": ".\\Templates",
+  "OutputRoot": ".\\Output",
+  "AutomationLogRoot": "C:\\Temp\\AutomationLogs",
+  "PSADTVersion": "3.10",
+  "InstallerTypes": [
+    "MSI",
+    "EXE"
+  ]
+}
