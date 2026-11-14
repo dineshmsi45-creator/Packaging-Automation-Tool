@@ -1,0 +1,26 @@
+# Temporary files
+Temp/
+temp/
+*.tmp
+
+# Log files
+Logs/
+*.log
+
+# Generated packages
+Output/
+*.intunewin
+
+# Sensitive information
+.env
+*.pfx
+*.p12
+secrets.json
+credentials.json
+
+# Temporary backup files
+*.bak
+
+# IDE settings
+.vscode/
+*.user
