@@ -1,0 +1,102 @@
+Application Packaging Automation V1 - CHANGES
+
+1. SilentSwitchFinder integration
+   - Automatically runs for selected EXE installers.
+   - Detected silent parameters are populated in the Installation tab.
+   - Automatically runs for selected uninstall EXE files.
+   - Detected uninstall parameters are populated in the Uninstallation tab.
+   - MSI packages do not use SilentSwitchFinder.
+
+2. ServiceUI.exe handling
+   - ServiceUI.exe is copied from the PSADT template only when ServiceUI is selected.
+   - It is not automatically included in packages when the option is not selected.
+
+3. Deploy-Application.ps1 alignment
+   - Generated Pre/Post installation and uninstallation commands follow the existing PSADT template indentation/alignment.
+   - Existing PSADT variable formatting is preserved.
+   - appVendor, appName, appVersion and related variables retain the expected formatting.
+
+4. Full source copy
+   - The complete source folder is copied into Package\Files.
+   - The selected installer is used as the primary installer, but supporting files are also retained.
+
+5. CloseApps
+   - Installation and Uninstallation CloseApps are handled independently.
+   - Installation CloseApps updates/enables only the Installation Show-InstallationWelcome section.
+   - Uninstallation CloseApps updates/enables only the Uninstallation Show-InstallationWelcome section.
+   - If a section has no CloseApps entry, its Show-InstallationWelcome remains commented.
+   - Duplicate Show-InstallationWelcome commands are not created.
+
+6. PID document
+   - PID generation remains a mandatory part of the package workflow.
+   - PID generation occurs after the PSADT package and Deploy-Application.ps1 content have been populated.
+   - PID generation must complete before the review/build stage.
+   - PID generation false-failure handling was corrected so a stale native $LASTEXITCODE does not incorrectly mark a successful PID generation as failed.
+
+7. Check & Edit Deploy-Application.ps1
+   - After package and PID generation, the user can open and review Deploy-Application.ps1.
+   - The user can verify installation, uninstallation, pre/post steps and parameters.
+   - Manual changes can be made and saved before building the IntuneWin file.
+   - Confirm & Build does not regenerate the PID or overwrite the reviewed Deploy-Application.ps1.
+
+8. Package review prompt
+   - After successful package and PID generation, a prompt informs the user that the package and PID document are ready for review.
+   - The user is instructed to check/edit Deploy-Application.ps1 and then confirm and build the IntuneWin file.
+   - The same review message is written to the package log.
+
+9. IntuneWin build
+   - Confirm & Build resolves and validates IntuneWinAppUtil.exe again during the build stage.
+   - This prevents the FilePath null/empty error encountered during the continuation/build workflow.
+   - The IntuneWin build uses the reviewed package.
+
+10. Non-Automated IntuneWin
+    - A separate Non-Automated IntuneWin tab is available.
+    - Browse Source Folder.
+    - Select Setup File.
+    - Select Output Folder.
+    - Create the IntuneWin file without running the automated packaging workflow.
+    - Custom Uninstallation Command was removed from the UI.
+    - Generate Standard MST (MSI only) remains available.
+
+11. Standard MST
+    - Generate Standard MST remains available for MSI packages.
+    - MSI does not use SilentSwitchFinder.
+
+12. Package-specific logging
+    - Logs are stored under C:\Temp\AutomationLogs.
+    - A package-specific folder is used to make troubleshooting easier.
+
+13. Run Log / live progress
+    - Run Log was updated to stream packaging activity instead of remaining blank until the operation finishes.
+    - The log is intended to show progress while Prepare Package and PID generation are running.
+    - Important package events are written to the log as they occur.
+
+14. Build & Output
+    - Build & Output contains the main package preparation/build controls.
+    - Controls include package preparation, IntuneWin build, resume/retry, template validation and output/log access as applicable.
+    - Button sizing/layout can be adjusted so all required controls remain visible.
+
+15. Overall workflow
+    Select Installer
+        |
+    SilentSwitchFinder (EXE only)
+        |
+    Prepare PSADT package
+        |
+    Populate Deploy-Application.ps1
+        |
+    Generate PID
+        |
+    Package ready for review prompt
+        |
+    Check & Edit Deploy-Application.ps1
+        |
+    Confirm & Build
+        |
+    Validate package
+        |
+    Convert to .intunewin
+        |
+    Final validation
+
+Version: V1
